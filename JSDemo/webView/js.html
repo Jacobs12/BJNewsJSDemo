@@ -36,7 +36,6 @@ var d=document.getElementById('appInfo');
 d.innerText=isApp + version + deviceID;
 }
 
-
 function buttonClick(string){
    if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
        window.webkit.messageHandlers.getUserInformation.postMessage('userInfo');

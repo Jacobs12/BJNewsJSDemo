@@ -29,7 +29,14 @@
     [self.config.userContentController addScriptMessageHandler:[[BNWeakScriptMessageHandlerDelegate alloc] initWithDelegate:self] name:@"getUserStatus"];
     [self.config.userContentController addScriptMessageHandler:[[BNWeakScriptMessageHandlerDelegate alloc] initWithDelegate:self] name:@"log"];
     [self.config.userContentController addScriptMessageHandler:[[BNWeakScriptMessageHandlerDelegate alloc] initWithDelegate:self] name:@"shareToPlatform"];
-    config.preferences.javaScriptEnabled = YES;
+    if (@available(iOS 14.0, *)) {
+        WKWebpagePreferences * webpagePreferences = [[WKWebpagePreferences alloc]init];;
+        webpagePreferences.allowsContentJavaScript = YES;
+        config.defaultWebpagePreferences = webpagePreferences;
+    } else {
+        // Fallback on earlier versions
+        config.preferences.javaScriptEnabled = YES;
+    }
     config.preferences.minimumFontSize = 10.f;
     _webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 88.0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 88.0) configuration:config];
     _webView.UIDelegate = self;
