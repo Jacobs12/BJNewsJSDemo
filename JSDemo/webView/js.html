@@ -1,0 +1,81 @@
+<!DOCTYPE html">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<body>
+<p>判断是否在App，以下为返回值:</p>
+<p id="appInfo">======未收到App信息</p>
+<button onclick="viewDidAppear('确认是否在App')">确认是否在App</button>
+<p> </p>
+<p> </p>
+<p> </p>
+<p>获取到的用户信息：</p>
+<p id="userInfo">========未收到user信息</p>
+<button onclick="buttonClick('获取用户信息')">获取用户信息</button>
+
+<p>拉取用户信息，不拉登录页：</p>
+<p>登录状态：<span id="isLogin">未获取到登录状态</span></p>
+<p>登录信息：<span id="userStatusInfo">未获取到登录信息</span></p>
+<button onclick="userStatus('不拉登录页')">不拉登录页</button>
+
+<script>
+function viewDidAppear(string){
+if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+  window.webkit.messageHandlers.AppConfirm.postMessage('userInfo');
+  window.webkit.messageHandlers.log.postMessage(string);
+}else if(/(Android)/i.test(navigator.userAgent)){
+  window.bjnewapp.AppConfirm();
+}
+}
+
+function didOpenInApp(isApp,version,deviceID){
+if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+window.webkit.messageHandlers.log.postMessage(isApp + version + deviceID +'0610');
+}
+var d=document.getElementById('appInfo');
+d.innerText=isApp + version + deviceID;
+}
+
+
+function buttonClick(string){
+   if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+       window.webkit.messageHandlers.getUserInformation.postMessage('userInfo');
+       window.webkit.messageHandlers.log.postMessage(string);
+   }else if(/(Android)/i.test(navigator.userAgent)){
+       window.bjnewapp.getUserInformation();
+   }
+}
+
+function loginComplete(userInfo){
+if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+window.webkit.messageHandlers.log.postMessage(userInfo);
+}
+var d=document.getElementById('userInfo');
+d.innerText=userInfo;
+}
+</script>
+
+<script>
+function userStatus(string){
+    if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+          window.webkit.messageHandlers.getUserStatus.postMessage('userInfo');
+          window.webkit.messageHandlers.log.postMessage(string);
+    }else if(/(Android)/i.test(navigator.userAgent)){
+          window.bjnewapp.getUserStatus();
+    }
+}
+
+function userStatusResponse(isLogin,userInfo){
+if(/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+window.webkit.messageHandlers.log.postMessage(userInfo);
+}
+var c=document.getElementById('isLogin');
+c.innerText=isLogin;
+var d=document.getElementById('userStatusInfo');
+d.innerText=userInfo;
+}
+</script>
+
+</body>
+</html>
+
